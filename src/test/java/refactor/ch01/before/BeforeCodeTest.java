@@ -17,6 +17,7 @@ class BeforeCodeTest {
         BeforeCode beforeCode = new BeforeCode();
         RefactoredCode01 refactoredCode01 = new RefactoredCode01();
         RefactoredCode02 refactoredCode02 = new RefactoredCode02();
+        RefactoredCode02 refactoredCode03 = new RefactoredCode02();
 
         List<Performance> performances = new ArrayList<>();
         performances.add(new Performance("hamlet", 55));
@@ -39,9 +40,11 @@ class BeforeCodeTest {
         String beforeCoderesult = beforeCode.statement(invoice, plays);
         String refactor01Result = refactoredCode01.statement(invoice, plays);
         String refactor02Result = refactoredCode02.statement(invoice, plays);
+        String refactor03Result = refactoredCode03.statement(invoice, plays);
         //then
         assertEquals(answer, beforeCoderesult);
         assertEquals(answer, refactor01Result);
         assertEquals(answer, refactor02Result);
+        assertEquals(answer, refactor03Result);
     }
 }
