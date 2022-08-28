@@ -9,25 +9,25 @@ import refactor.ch01.before.StatementData;
 public class RefactoredCode07 {
 
     public String statement(Invoice invoice, HashMap<String, Play> plays) throws Exception {
-        StatementData statementData = new StatementData(invoice);
-        return renderPlainText(statementData, plays);
+        StatementData statementData = new StatementData(invoice, plays);
+        return renderPlainText(statementData);
     }
 
-    private static String renderPlainText(StatementData statementData, HashMap<String, Play> plays)
+    private static String renderPlainText(StatementData statementData)
         throws Exception {
         StringBuilder result =
             new StringBuilder(String.format("청구 내역 (고객명: %s)\n", statementData.getCustomer()));
 
         for (Performance performance : statementData.getPerformances()) {
             result.append(String.format("%s: $%d %d석\n",
-                playFor(plays, performance).getName(),
-                amountFor(performance, playFor(plays, performance)) / 100,
+                playFor(statementData.getPlays(), performance).getName(),
+                amountFor(performance, playFor(statementData.getPlays(), performance)) / 100,
                 performance.getAudience())
             );
         }
 
-        result.append(String.format("총액: $%d\n", totalAmount(statementData, plays) / 100));
-        result.append(String.format("적립 포인트: %d점", totalVolumeCredits(statementData, plays)));
+        result.append(String.format("총액: $%d\n", totalAmount(statementData) / 100));
+        result.append(String.format("적립 포인트: %d점", totalVolumeCredits(statementData)));
 
         return result.toString();
     }
@@ -58,20 +58,19 @@ public class RefactoredCode07 {
         return plays.get(performance.getPlayID());
     }
 
-    private static int totalAmount(StatementData statementData, HashMap<String, Play> plays)
+    private static int totalAmount(StatementData statementData)
         throws Exception {
         int result = 0;
         for (Performance performance : statementData.getPerformances()) {
-            result += amountFor(performance, playFor(plays, performance));
+            result += amountFor(performance, playFor(statementData.getPlays(), performance));
         }
         return result;
     }
 
-    private static int totalVolumeCredits(StatementData statementData,
-        HashMap<String, Play> plays) {
+    private static int totalVolumeCredits(StatementData statementData) {
         int result = 0;
         for (Performance performance : statementData.getPerformances()) {
-            result += volumeCreditsFor(plays, performance);
+            result += volumeCreditsFor(statementData.getPlays(), performance);
         }
         return result;
     }
