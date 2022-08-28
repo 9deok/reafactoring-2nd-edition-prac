@@ -1,20 +1,16 @@
-package refactor.ch01.refactored;
+package refactor.ch01.refactored.refoctoredCode;
 
-import java.util.HashMap;
-import refactor.ch01.PerformanceCalculator;
 import refactor.ch01.before.Invoice;
 import refactor.ch01.before.Performance;
 import refactor.ch01.before.Play;
-import refactor.ch01.before.StatementData;
+import refactor.ch01.refactored.Plays;
+import refactor.ch01.refactored.StatementData;
 
-public class RefactoredCode08 {
+public class RefactoredCode07 {
 
-    public String statement(Invoice invoice, HashMap<String, Play> plays) throws Exception {
-        return renderPlainText(new StatementData(invoice, plays));
-    }
-
-    public String htmlStatement(Invoice invoice, HashMap<String, Play> plays) throws Exception {
-        return renderHtml(new StatementData(invoice, plays));
+    public String statement(Invoice invoice, Plays plays) throws Exception {
+        StatementData statementData = new StatementData(invoice, plays);
+        return renderPlainText(statementData);
     }
 
     private static String renderPlainText(StatementData statementData)
@@ -36,30 +32,30 @@ public class RefactoredCode08 {
         return result.toString();
     }
 
-    private String renderHtml(StatementData statementData) throws Exception {
-        StringBuilder result = new StringBuilder(
-            String.format("<h1> 청구내역 (고객명: %s)\n </h1>", statementData.getCustomer()));
-        result.append("<table> \n");
-        result.append("<tr><th> 연극 </th> <th>좌석 수</th> <th>금액</th>");
-        for (Performance performance : statementData.getPerformances()) {
-            result.append(String.format("<tr><td> %s: </td> <td> $%d </td> <td> %d석 </td></tr>\n",
-                playFor(statementData.getPlays(), performance).getName(),
-                amountFor(performance, playFor(statementData.getPlays(), performance)) / 100,
-                performance.getAudience()));
-        }
-        result.append("</table>\n");
-
-        result.append(String.format("총액: $%d\n", totalAmount(statementData) / 100));
-        result.append(String.format("적립 포인트: %d점", totalVolumeCredits(statementData)));
-        return result.toString();
-    }
-
     private static int amountFor(Performance performance, Play play) throws Exception {
-        return new PerformanceCalculator(performance, play).amount();
+        int result;
+        switch (play.getType()) {
+            case "tragedy":
+                result = 40000;
+                if (performance.getAudience() > 30) {
+                    result += 1000 * (performance.getAudience() - 30);
+                }
+                break;
+            case "comedy":
+                result = 30000;
+                if (performance.getAudience() > 20) {
+                    result += 10000 + 500 * (performance.getAudience() - 20);
+                }
+                result += 300 * performance.getAudience();
+                break;
+            default:
+                throw new Exception("알 수 없는 장르" + play.getType());
+        }
+        return result;
     }
 
-    private static Play playFor(HashMap<String, Play> plays, Performance performance) {
-        return plays.get(performance.getPlayID());
+    private static Play playFor(Plays plays, Performance performance) {
+        return plays.get(performance);
     }
 
     private static int totalAmount(StatementData statementData)
@@ -79,7 +75,7 @@ public class RefactoredCode08 {
         return result;
     }
 
-    private static int volumeCreditsFor(HashMap<String, Play> plays, Performance performance) {
+    private static int volumeCreditsFor(Plays plays, Performance performance) {
         int result = 0;
         result += Math.max(performance.getAudience() - 30, 0);
         if ("comedy".equals(playFor(plays, performance).getType())) {

@@ -1,4 +1,4 @@
-package refactor.ch01;
+package refactor.ch01.refactored.performaceCalculator;
 
 import lombok.AllArgsConstructor;
 import refactor.ch01.before.Performance;

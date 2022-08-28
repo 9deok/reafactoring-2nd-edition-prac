@@ -1,22 +1,18 @@
-package refactor.ch01.refactored;
+package refactor.ch01.refactored.refoctoredCode;
 
 import java.util.HashMap;
 import refactor.ch01.before.Invoice;
 import refactor.ch01.before.Performance;
 import refactor.ch01.before.Play;
 
-public class RefactoredCode04 {
+public class RefactoredCode05 {
 
     public String statement(Invoice invoice, HashMap<String, Play> plays) throws Exception {
         int totalAmount = 0;
-        int volumeCredits = 0;
-
         StringBuilder result =
             new StringBuilder(String.format("청구 내역 (고객명: %s)\n", invoice.getCustomer()));
 
         for (Performance performance : invoice.getPerformances()) {
-            volumeCredits += volumeCreditsFor(plays, performance);
-
             result.append(String.format("%s: $%d %d석\n",
                 playFor(plays, performance).getName(),
                 amountFor(performance, playFor(plays, performance)) / 100,
@@ -24,19 +20,11 @@ public class RefactoredCode04 {
             );
             totalAmount += amountFor(performance, playFor(plays, performance));
         }
+
         result.append(String.format("총액: $%d\n", totalAmount / 100));
-        result.append(String.format("적립 포인트: %d점", volumeCredits));
+        result.append(String.format("적립 포인트: %d점", totalVolumeCredits(invoice, plays)));
 
         return result.toString();
-    }
-
-    private static int volumeCreditsFor(HashMap<String, Play> plays, Performance performance) {
-        int result = 0;
-        result += Math.max(performance.getAudience() - 30, 0);
-        if ("comedy".equals(playFor(plays, performance).getType())) {
-            result += Math.floor(performance.getAudience() / 5);
-        }
-        return result;
     }
 
     private static int amountFor(Performance performance, Play play) throws Exception {
@@ -63,5 +51,22 @@ public class RefactoredCode04 {
 
     private static Play playFor(HashMap<String, Play> plays, Performance performance) {
         return plays.get(performance.getPlayID());
+    }
+
+    private static int totalVolumeCredits(Invoice invoice, HashMap<String, Play> plays) {
+        int result = 0;
+        for (Performance performance : invoice.getPerformances()) {
+            result += volumeCreditsFor(plays, performance);
+        }
+        return result;
+    }
+
+    private static int volumeCreditsFor(HashMap<String, Play> plays, Performance performance) {
+        int result = 0;
+        result += Math.max(performance.getAudience() - 30, 0);
+        if ("comedy".equals(playFor(plays, performance).getType())) {
+            result += Math.floor(performance.getAudience() / 5);
+        }
+        return result;
     }
 }

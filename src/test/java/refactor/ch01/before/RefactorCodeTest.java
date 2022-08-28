@@ -6,14 +6,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import refactor.ch01.refactored.RefactoredCode01;
-import refactor.ch01.refactored.RefactoredCode02;
-import refactor.ch01.refactored.RefactoredCode03;
-import refactor.ch01.refactored.RefactoredCode04;
-import refactor.ch01.refactored.RefactoredCode05;
-import refactor.ch01.refactored.RefactoredCode06;
-import refactor.ch01.refactored.RefactoredCode07;
-import refactor.ch01.refactored.RefactoredCode08;
+import refactor.ch01.refactored.Plays;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode01;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode02;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode03;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode04;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode05;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode06;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode07;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode08;
 
 class RefactorCodeTest {
 
@@ -41,6 +42,8 @@ class RefactorCodeTest {
         plays.put("as-like", new Play("As You Like It", "comedy"));
         plays.put("othello", new Play("Othello", "tragedy"));
 
+        Plays playsObject = new Plays(plays);
+
         String answer = "청구 내역 (고객명: BigCo)\n" +
             "hamlet: $650 55석\n" +
             "As You Like It: $580 35석\n" +
@@ -55,8 +58,8 @@ class RefactorCodeTest {
         String refactor04Result = refactoredCode04.statement(invoice, plays);
         String refactor05Result = refactoredCode05.statement(invoice, plays);
         String refactor06Result = refactoredCode06.statement(invoice, plays);
-        String refactor07Result = refactoredCode07.statement(invoice, plays);
-        String refactor08Result = refactoredCode08.statement(invoice, plays);
+        String refactor07Result = refactoredCode07.statement(invoice, playsObject);
+        String refactor08Result = refactoredCode08.statement(invoice, playsObject);
 
         //then
         assertEquals(answer, beforeCoderesult);

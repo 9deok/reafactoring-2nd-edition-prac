@@ -1,33 +1,26 @@
-package refactor.ch01.refactored;
+package refactor.ch01.refactored.refoctoredCode;
 
 import java.util.HashMap;
 import refactor.ch01.before.Invoice;
 import refactor.ch01.before.Performance;
 import refactor.ch01.before.Play;
-import refactor.ch01.before.StatementData;
 
-public class RefactoredCode07 {
+public class RefactoredCode06 {
 
     public String statement(Invoice invoice, HashMap<String, Play> plays) throws Exception {
-        StatementData statementData = new StatementData(invoice, plays);
-        return renderPlainText(statementData);
-    }
-
-    private static String renderPlainText(StatementData statementData)
-        throws Exception {
         StringBuilder result =
-            new StringBuilder(String.format("청구 내역 (고객명: %s)\n", statementData.getCustomer()));
+            new StringBuilder(String.format("청구 내역 (고객명: %s)\n", invoice.getCustomer()));
 
-        for (Performance performance : statementData.getPerformances()) {
+        for (Performance performance : invoice.getPerformances()) {
             result.append(String.format("%s: $%d %d석\n",
-                playFor(statementData.getPlays(), performance).getName(),
-                amountFor(performance, playFor(statementData.getPlays(), performance)) / 100,
+                playFor(plays, performance).getName(),
+                amountFor(performance, playFor(plays, performance)) / 100,
                 performance.getAudience())
             );
         }
 
-        result.append(String.format("총액: $%d\n", totalAmount(statementData) / 100));
-        result.append(String.format("적립 포인트: %d점", totalVolumeCredits(statementData)));
+        result.append(String.format("총액: $%d\n", totalAmount(invoice, plays) / 100));
+        result.append(String.format("적립 포인트: %d점", totalVolumeCredits(invoice, plays)));
 
         return result.toString();
     }
@@ -58,19 +51,19 @@ public class RefactoredCode07 {
         return plays.get(performance.getPlayID());
     }
 
-    private static int totalAmount(StatementData statementData)
+    private static int totalAmount(Invoice invoice, HashMap<String, Play> plays)
         throws Exception {
         int result = 0;
-        for (Performance performance : statementData.getPerformances()) {
-            result += amountFor(performance, playFor(statementData.getPlays(), performance));
+        for (Performance performance : invoice.getPerformances()) {
+            result += amountFor(performance, playFor(plays, performance));
         }
         return result;
     }
 
-    private static int totalVolumeCredits(StatementData statementData) {
+    private static int totalVolumeCredits(Invoice invoice, HashMap<String, Play> plays) {
         int result = 0;
-        for (Performance performance : statementData.getPerformances()) {
-            result += volumeCreditsFor(statementData.getPlays(), performance);
+        for (Performance performance : invoice.getPerformances()) {
+            result += volumeCreditsFor(plays, performance);
         }
         return result;
     }

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import refactor.ch01.before.Invoice;
 import refactor.ch01.before.Play;
+import refactor.ch01.refactored.refoctoredCode.RefactoredCode01;
 
 public class RunRefactorCode {
 
