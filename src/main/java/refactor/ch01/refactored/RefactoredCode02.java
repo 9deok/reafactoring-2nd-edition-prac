@@ -15,16 +15,16 @@ public class RefactoredCode02 {
             new StringBuilder(String.format("청구 내역 (고객명: %s)\n", invoice.getCustomer()));
 
         for (Performance performance : invoice.getPerformances()) {
-            Play play = plays.get(performance.getPlayID());
-            int thisAmount = amountFor(performance, play);
+            int thisAmount = amountFor(performance, playFor(plays, performance));
 
             volumeCredits += Math.max(performance.getAudience() - 30, 0);
-            if ("comedy".equals(play.getType())) {
+            if ("comedy".equals(playFor(plays, performance).getType())) {
                 volumeCredits += Math.floor(performance.getAudience() / 5);
             }
 
             result.append(String.format("%s: $%d %d석\n",
-                play.getName(), thisAmount / 100, performance.getAudience()));
+                playFor(plays, performance).getName(), thisAmount / 100,
+                performance.getAudience()));
             totalAmount += thisAmount;
         }
         result.append(String.format("총액: $%d\n", totalAmount / 100));
@@ -53,5 +53,9 @@ public class RefactoredCode02 {
                 throw new Exception("알 수 없는 장르" + play.getType());
         }
         return result;
+    }
+
+    private static Play playFor(HashMap<String, Play> plays, Performance performance) {
+        return plays.get(performance.getPlayID());
     }
 }
