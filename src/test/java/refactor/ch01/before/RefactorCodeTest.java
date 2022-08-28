@@ -11,6 +11,7 @@ import refactor.ch01.refactored.RefactoredCode02;
 import refactor.ch01.refactored.RefactoredCode03;
 import refactor.ch01.refactored.RefactoredCode04;
 import refactor.ch01.refactored.RefactoredCode05;
+import refactor.ch01.refactored.RefactoredCode06;
 
 class RefactorCodeTest {
 
@@ -23,6 +24,7 @@ class RefactorCodeTest {
         RefactoredCode03 refactoredCode03 = new RefactoredCode03();
         RefactoredCode04 refactoredCode04 = new RefactoredCode04();
         RefactoredCode05 refactoredCode05 = new RefactoredCode05();
+        RefactoredCode06 refactoredCode06 = new RefactoredCode06();
 
         List<Performance> performances = new ArrayList<>();
         performances.add(new Performance("hamlet", 55));
@@ -48,6 +50,7 @@ class RefactorCodeTest {
         String refactor03Result = refactoredCode03.statement(invoice, plays);
         String refactor04Result = refactoredCode04.statement(invoice, plays);
         String refactor05Result = refactoredCode05.statement(invoice, plays);
+        String refactor06Result = refactoredCode06.statement(invoice, plays);
         //then
         assertEquals(answer, beforeCoderesult);
         assertEquals(answer, refactor01Result);
@@ -55,5 +58,6 @@ class RefactorCodeTest {
         assertEquals(answer, refactor03Result);
         assertEquals(answer, refactor04Result);
         assertEquals(answer, refactor05Result);
+        assertEquals(answer, refactor06Result);
     }
 }
