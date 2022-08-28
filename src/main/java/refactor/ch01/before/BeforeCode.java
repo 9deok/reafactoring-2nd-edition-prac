@@ -43,7 +43,7 @@ public class BeforeCode {
             totalAmount += thisAmount;
         }
         result.append(String.format("총액: $%d\n", totalAmount / 100));
-        result.append(String.format("적립 포인트: %d점\n", volumeCredits));
+        result.append(String.format("적립 포인트: %d점", volumeCredits));
 
         return result.toString();
     }
